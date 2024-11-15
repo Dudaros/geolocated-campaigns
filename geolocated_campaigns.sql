@@ -1,12 +1,13 @@
+
 ---- Offtheshelf orders
-DROP TABLE IF EXISTS #physical_store_argyroupoli
+DROP TABLE IF EXISTS #physical_store_iwannina
 SELECT DISTINCT [OneCustomer ID]
 	, [Document ID]
 	, [Sales Office ID]
-INTO #physical_store_argyroupoli
+INTO #physical_store_iwannina
   FROM [CustomerAnalytics].[forecast].[factOneCustomerSales_new] WITH (NOLOCK)
   WHERE 1=1
-	AND LEFT([Sales Office ID],4) IN ('7503')
+	AND LEFT([Sales Office ID],4) IN ('7060')
 	AND YEAR([Date])>= '2019'
 	AND [Country ID] = '0070'
 	AND [OneCustomer ID] IS NOT NULL
@@ -15,14 +16,14 @@ INTO #physical_store_argyroupoli
 
 
 ---- Webservices/Store orders courier
-DROP TABLE IF EXISTS #store_courier_argyroupoli
+DROP TABLE IF EXISTS #store_courier_iwannina
 SELECT DISTINCT [OneCustomer ID]
 	, [Document ID]
 	, [Sales Office ID]
-INTO #store_courier_argyroupoli
+INTO #store_courier_iwannina
   FROM [CustomerAnalytics].[forecast].[factOneCustomerSales_new] WITH (NOLOCK)
   WHERE 1=1
-	AND LEFT([Sales Office ID],4) IN ('7503')
+	AND LEFT([Sales Office ID],4) IN ('7060')
 	AND YEAR([Date]) >= '2019'
 	AND [Country ID] = '0070'
 	AND [OneCustomer ID] IS NOT NULL
@@ -32,14 +33,14 @@ INTO #store_courier_argyroupoli
 
 
 ---- Webservices/Store orders store pickup
-DROP TABLE IF EXISTS #store_store_argyroupoli
+DROP TABLE IF EXISTS #store_store_iwannina
 SELECT DISTINCT [OneCustomer ID]
 	, [Document ID]
 	, [Sales Office ID]
-INTO #store_store_argyroupoli
+INTO #store_store_iwannina
   FROM [CustomerAnalytics].[forecast].[factOneCustomerSales_new] WITH (NOLOCK)
   WHERE 1=1
-	AND LEFT([Sales Office ID],4) IN ('7503')
+	AND LEFT([Sales Office ID],4) IN ('7060')
 	AND YEAR([Date]) >= '2019'
 	AND [Country ID] = '0070'
 	AND [OneCustomer ID] IS NOT NULL
@@ -49,14 +50,14 @@ INTO #store_store_argyroupoli
 
 
 ---- Web orders store pickup
-DROP TABLE IF EXISTS #web_argyroupoli
+DROP TABLE IF EXISTS #web_iwannina
 SELECT DISTINCT [OneCustomer ID]
 	, [Document ID]
 	, [Plant ID]
-INTO #web_argyroupoli
+INTO #web_iwannina
   FROM [CustomerAnalytics].[forecast].[factOneCustomerSales_new] WITH (NOLOCK)
   WHERE 1=1
-	AND LEFT([Plant ID],4) IN ('7503')
+	AND LEFT([Plant ID],4) IN ('7060')
 	AND YEAR([Date]) >= '2019'
 	AND [Country ID] = '0070'
 	AND [OneCustomer ID] IS NOT NULL
@@ -71,45 +72,10 @@ SELECT a.[OneCustomer ID]
 	, CASE WHEN b.Shiptopostalcode IS NULL THEN c.[Shiptopostalcode] ELSE b.[Shiptopostalcode] END AS [Shiptopostalcode]
 INTO #tmp_hd
 FROM [CustomerAnalytics].[forecast].[factOneCustomerSales_new] AS a WITH (NOLOCK)
-LEFT JOIN (SELECT DISTINCT [Order No], [Shiptopostalcode] FROM [DW_PRD].[dw].[nexus_fact_order_lines] with (nolock) where [Shiptopostalcode] IN ('17341', '17342', '17343', 
-'17455', '17456', 
-'12351', 
-'18233', '18234', 
-'16451', '16452', 
-'16672', '16673', 
-'16672', '16673', '16674', 
-'16673', '16674', 
-'16671', 
-'16674', '16675', '16676', 
-'17235', '17236', 
-'16777', '16778', 
-'17671', '17672', '17673', 
-'18533', 
-'18344', '18345', '18346', 
-'17121', '17122', '17123', '17124', 
-'17561', '17562', '17563', 
-'17778'
-) )  AS b ON a.[Order ID]=b.[Order No] 
-LEFT JOIN (SELECT DISTINCT [Ordernum], [Shiptopostalcode] FROM [WEBDATA].[web].[DOCUMENT_HEADER] with (nolock) where [Shiptopostalcode] IN ('17341', '17342', '17343', 
-'17455', '17456', 
-'12351', 
-'18233', '18234', 
-'16451', '16452', 
-'16672', '16673', 
-'16672', '16673', '16674', 
-'16673', '16674', 
-'16671', 
-'16674', '16675', '16676', 
-'17235', '17236', 
-'16777', '16778', 
-'17671', '17672', '17673', 
-'18533', 
-'18344', '18345', '18346', 
-'17121', '17122', '17123', '17124', 
-'17561', '17562', '17563', 
-'17778'
-
-) )  AS c ON a.[Order ID]=c.[Ordernum] 
+LEFT JOIN (SELECT DISTINCT [Order No], [Shiptopostalcode] FROM [DW_PRD].[dw].[nexus_fact_order_lines] with (nolock) where [Shiptopostalcode] IN ('45221','45222','45232','45233','45244','45333','45332','45445','45444','45500','45570','44002','44003','44001'
+,'44010','44200','44100','44004','46100','46131','46030','46200','46300','47132','47131','47150','47041','47040','47045','47044','47043','48100','48200','48060','48061','48062','48300','30131','30132','30133','30150') )  AS b ON a.[Order ID]=b.[Order No] 
+LEFT JOIN (SELECT DISTINCT [Ordernum], [Shiptopostalcode] FROM [WEBDATA].[web].[DOCUMENT_HEADER] with (nolock) where [Shiptopostalcode] IN ('45221','45222','45232','45233','45244','45333','45332','45445','45444','45500','45570','44002','44003','44001'
+,'44010','44200','44100','44004','46100','46131','46030','46200','46300','47132','47131','47150','47041','47040','47045','47044','47043','48100','48200','48060','48061','48062','48300','30131','30132','30133','30150') )  AS c ON a.[Order ID]=c.[Ordernum] 
 WHERE 1=1
 	AND YEAR([Date]) >= '2019'
 	AND [Country ID] = '0070'
@@ -120,16 +86,16 @@ WHERE 1=1
 DROP TABLE IF EXISTS #customers_final
 SELECT *
 INTO #customers_final
-FROM #physical_store_argyroupoli
+FROM #physical_store_iwannina
 UNION 
 SELECT *
-FROM #store_courier_argyroupoli
+FROM #store_courier_iwannina
 UNION 
 SELECT *
-FROM #store_store_argyroupoli
+FROM #store_store_iwannina
 UNION 
 SELECT *
-FROM #web_argyroupoli
+FROM #web_iwannina
 UNION 
 SELECT *
 FROM #tmp_hd
@@ -139,7 +105,7 @@ FROM #tmp_hd
 
 DROP TABLE IF EXISTS #mobile_consent
 SELECT TOP 1 with ties *
-INTO #mobile_consent
+INTO #mobile_consnet
 FROM [CustomerAnalytics].[customer].[Customer_Consent_DB]
 WHERE 1=1
 	AND mobile <> ''
@@ -152,17 +118,17 @@ DROP TABLE IF EXISTS #mobile_consent_list
 SELECT distinct a.*
 	, b.*
 	, CASE WHEN c.[mobileConsent] IS NULL THEN 3 ELSE c.[mobileConsent] END AS [mobileConsent]
-INTO #mobile_consent_list
+INTO #mobile_consnet_list
 FROM #customers_final AS a
 LEFT JOIN [CustomerAnalytics].[customer].[BasicInfo] AS b ON a.[OneCustomer ID]=b._id
-LEFT JOIN #mobile_consent AS c ON b.mobile = c.mobile 
+LEFT JOIN #mobile_consnet AS c ON b.mobile = c.mobile 
 
 
 DROP TABLE IF EXISTS #Final_list
 SELECT a.*
 	, CASE WHEN b.emailConsent IS NULL THEN 3 ELSE b.emailConsent END AS emailConsent
 INTO #Final_list
-FROM #mobile_consent_list AS a
+FROM #mobile_consnet_list AS a
 LEFT JOIN [CustomerAnalytics].[customer].[Customer_Consent_DB] AS b ON a.[value] =b.[_id.email] AND a.[type]= 'EMAIL'
 WHERE 1=1
 
@@ -181,26 +147,12 @@ SELECT DISTINCT [OneCustomer ID]
 	, [NEXT_ID]
 	, mobileConsent
 	, emailConsent
-	, CASE WHEN [Sales Office ID] IN ('7503') THEN 'Store - Public+ Home Αργυρούπολης'
-		   WHEN [Sales Office ID] IN ('17341', '17342', '17343') THEN 'Άγιος Δημήτριος'
-		   WHEN [Sales Office ID] IN ('17455', '17456') THEN 'Άλιμος'
-		   WHEN [Sales Office ID] IN ('12351') THEN 'Αγία Βαρβάρα'
-		   WHEN [Sales Office ID] IN ('18233', '18234') THEN 'Άγιος Ιωάννης Ρέντης'
-                   WHEN [Sales Office ID] IN ('16451', '16452') THEN 'Αργυρούπολη'
-                   WHEN [Sales Office ID] IN ('16672', '16673') THEN 'Βάρη'
-                   WHEN [Sales Office ID] IN ('16672', '16673', '16674') THEN 'Βάρη - Βάρκιζα'
-		   WHEN [Sales Office ID] IN ('16673', '16674') THEN 'Βούλα'
-		   WHEN [Sales Office ID] IN ('16671') THEN 'Βουλιαγμένη'
-		   WHEN [Sales Office ID] IN ('16674', '16675', '16676') THEN 'Γλυφάδα'
-		   WHEN [Sales Office ID] IN ('17235', '17236') THEN 'Δάφνη'
-		   WHEN [Sales Office ID] IN ('16777', '16778') THEN 'Ελληνικό'
-		   WHEN [Sales Office ID] IN ('17671', '17672', '17673') THEN 'Καλλιθέα'
-		   WHEN [Sales Office ID] IN ('18533') THEN 'Καστέλλα'
-		   WHEN [Sales Office ID] IN ('18344', '18345', '18346') THEN 'Μοσχάτο'
-		   WHEN [Sales Office ID] IN ('17121', '17122', '17123', '17124') THEN 'Νέα Σμύρνη'
-		   WHEN [Sales Office ID] IN ('17561', '17562', '17563') THEN 'Παλαιό Φάληρο'
-		   WHEN [Sales Office ID] IN ('17778') THEN 'Ταύρος'
-
+	, CASE WHEN [Sales Office ID] IN ('7060') THEN 'Store - Public Ξ™Ο‰Ξ¬Ξ½Ξ½ΞΉΞ½Ξ±'
+		   WHEN [Sales Office ID] IN ('45221','45222','45232','45233','45244','45333','45332','45445','45444','45500','45570','44002','44003','44001','44010','44200','44100','44004','46100') THEN 'HD - ΞΞΏΞΌΟΟ‚ Ξ™Ο‰Ξ±Ξ½Ξ½Ξ―Ξ½Ο‰Ξ½'
+		   WHEN [Sales Office ID] IN ('46131','46030','46200','46300') THEN 'ΞΞΏΞΌΟΟ‚ ΞΞµΟƒΟ€ΟΟ‰Ο„Ξ―Ξ±Ο‚'
+		   WHEN [Sales Office ID] IN ('47132','47131','47150','47041','47040','47045','47044','47043') THEN 'ΞΞΏΞΌΟΟ‚ Ξ†ΟΟ„Ξ±Ο‚'
+		   WHEN [Sales Office ID] IN ('48100','48200','48060','48061','48062','48300') THEN 'ΞΞΏΞΌΟΟ‚ Ξ ΟΞ­Ξ²ΞµΞ¶Ξ±Ο‚'
+		   WHEN [Sales Office ID] IN ('30131','30132','30133','30150') THEN 'Ξ‘Ξ³ΟΞ―Ξ½ΞΉΞΏ'
 	   ELSE 'Other' END AS Public_store
 	, CASE WHEN ([mobileConsent] = 1 OR emailConsent = 1) THEN 'Has consent'
 		   WHEN ([mobileConsent] = 0 OR  emailConsent = 0) THEN 'Has no consent'
